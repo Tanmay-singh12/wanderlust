@@ -1,8 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }       
+//require('dotenv').config();
 
-require('dotenv').config();
 
 const express = require('express');
 const app = express();
@@ -124,15 +124,21 @@ app.use("/", userRouter);
 
 
 app.use((err, req, res, next) => {
+    console.log(err);   
     let {message = "Something went wrong", statusCode = 500} = err;
+    if (!res.locals.currUser) res.locals.currUser = null; 
+
     res.status(statusCode).render("error.ejs", {message});
 });
+
+
 
 // app.listen(8080, () => {                                
 //     console.log("Server is listening to port 8080");          
 // }); 
 
 const PORT = process.env.PORT || 8080;
+
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
